@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+        	background: url(resource?asset=BACKGROUND_IMAGE) no-repeat;
+            background-size: cover;
+            color: #fff;
+        }
+
+        .register {
+            margin-top: 16vh;
+        }
+
+        .register .card {
+            background: rgba(0, 0, 0, .4);
+        }
+
+        .register label {
+            font-size: 1.3em;
+            color: #ccc;
+        }
+
+        .register input {
+            font-size: 1.5em !important;
+            color: #fff;
+        }
+
+        .register button {
+            transition-delay: 90ms;
+            transition-duration: 350ms;
+            transition-property: padding;
+            transition-timing-function: cubic-bezier(0.64,-0.82, 0.88, 1.45);
+        }
+
+        .register button:hover {
+            padding: 0 60px;
+        }
+    </style>
+    <title>ToVa</title>
+</head>
+<body>
+    <div class="row register">
+        <div class="col s12 l4 offset-l4">
+            <div class="card">
+                <div class="card-action red white-text">
+                    <h3>Registration</h3>
+                </div>
+                <div class="card-content">
+                    <div class="form-field">
+                        <label for="username">Username</label>
+                        <input type="text" id="username">
+                    </div><br>
+                    <div class="form-field">
+                        <label for="password">Password</label>
+                        <input type="password" id="password">
+                    </div><br>
+                    <div class="form-field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email">
+                    </div><br>
+                    <div class="input-field">
+                        <select id="role">
+                            <option value="" disabled selected>Choose your role</option>
+                            <option value="platinum">Platinum</option>
+                            <option value="premium">Premium</option>
+                            <option value="admin">Admin</option>
+                            <option value="user">User</option>
+                        </select>
+                        <label>User Role</label>
+                    </div><br>
+                    <div class="form-field center-align">
+                        <button class="btn-large red" id="registerBtn">Register Me</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+	M.AutoInit();
+    
+    const register = e => {
+        const username = document.querySelector('#username').value;
+        const password = document.querySelector('#password').value;
+        const email = document.querySelector('#email').value;
+        const role = document.querySelector('#role').value;
+
+        const user = { username, password, email, role }
+
+        fetch(`http://localhost:8080/ToVa/registerAction`, {
+            method: 'POST',
+            headers: {
+                "content-type" : "application/json"
+            },
+            body: JSON.stringify(user)
+        })
+        .then(_ => _.json())
+        .then(_ => {
+            if(_.msg)
+        	    alert(_.msg)
+            else
+                window.location.href = `http://localhost:8080/ToVa/login`
+        })
+        .catch(_ => console.log(_))
+
+    }
+
+    document.querySelector('#registerBtn').addEventListener('click', register)
+</script>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+        	background: url(resource?asset=BACKGROUND_IMAGE) no-repeat;
+            background-size: cover;
+            color: #fff;
+        }
+
+        .login {
+            margin-top: 16vh;
+        }
+
+        .login .card {
+            background: rgba(0, 0, 0, .4);
+        }
+
+        .login label {
+            font-size: 1.3em;
+            color: #ccc;
+        }
+
+        .login input {
+            font-size: 1.5em !important;
+            color: #fff;
+        }
+
+        .login button {
+            transition-delay: 90ms;
+            transition-duration: 350ms;
+            transition-property: padding;
+            transition-timing-function: cubic-bezier(0.64,-0.82, 0.88, 1.45);
+        }
+
+        .login button:hover {
+            padding: 0 60px;
+        }
+
+        .login .links a{
+            display: block;
+        }
+    </style>
+    <title>ToVa</title>
+</head>
+<body>
+    <div class="row login">
+        <div class="col s12 l4 offset-l4">
+            <div class="card">
+                <div class="card-action red white-text">
+                    <h3>Login</h3>
+                </div>
+                <div class="card-content">
+                    <div class="form-field">
+                        <label for="username">Username</label>
+                        <input type="text" id="username">
+                    </div><br>
+                    <div class="form-field">
+                        <label for="password">Password</label>
+                        <input type="password" id="password">
+                    </div><br>
+                    <div class="form-field">
+                        <a href="register">
+                            <div class="indigo-text text-lighten-4">
+                                <i class="tiny material-icons">add_circle</i>
+                                Don't have a user yet?
+                            </div>
+                        </a>
+                        <a href="restore">
+                            <div class="indigo-text text-lighten-4">
+                                <i class="tiny material-icons">account_circle</i>
+                                Forgot your password?
+                            </div>
+                        </a>
+                    </div><br>
+                    <div class="form-field center-align">
+                        <button class="btn-large red" id="loginBtn">Login</button>
+                    </div><br>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+	const login = e => {
+	    e.preventDefault()
+	    const username = document.querySelector('#username').value
+	    const password = document.querySelector('#password').value
+	    
+	    fetch(`http://localhost:8080/ToVa/loginAction?username=${username}&password=${password}`)
+	        .then(_ => _.json())
+	        .then(_ => {
+                if(_.msg) {
+                    alert(_.msg)
+                } else {
+                    localStorage.setItem("token", _.token)
+                    window.location.href = `http://localhost:8080/ToVa/user`
+                }
+            })
+	        .catch(_ => console.log(_))
+	
+	}
+	
+	document.querySelector('#loginBtn').addEventListener('click', login)
+</script>
+</html>

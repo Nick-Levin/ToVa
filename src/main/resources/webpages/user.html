@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> 
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+        	background: url(resource?asset=BACKGROUND_IMAGE) no-repeat;
+            background-size: cover;
+            color: #fff;
+        }
+
+        .user-info {
+            margin-top: 16vh;
+        }
+
+        .user-info .card-panel {
+            background: rgba(0, 0, 0, .4);
+            font-size: 1.6em;
+        }
+    </style>
+    <title>ToVa</title>
+</head>
+<body>
+    <div class="row user-info">
+        <div class="col s12 l4 offset-l4">
+            <div class="card-panel">
+                <span class="white-text" id="content">
+                    WORKS!!!
+                </span>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script>
+	const card = document.querySelector('#content')
+    const token = localStorage.getItem('token')
+    const breakTag = '<br/>'
+    
+    fetch(`http://localhost:8080/ToVa/user/info`, {
+        method  : 'GET',
+        headers : {
+            "content-type" : "application/json",
+            "Authorization" : token
+        }
+    })
+    .then(_ => _.json())
+    .then(_ => {
+        card.innerHTML = `Username : ${_.username + breakTag}Email : ${_.email + breakTag}Role : ${_.role + breakTag}`
+    })
+    .catch(_ => {
+        console.log(_)
+        window.location.href = `http://localhost:8080/ToVa/login`
+    })
+
+</script>
+</html>
